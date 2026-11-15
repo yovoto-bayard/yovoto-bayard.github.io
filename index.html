@@ -36,6 +36,10 @@
   .n{flex:none;width:26px;height:26px;border-radius:50%;background:#e7f2ee;color:#0a6649;font-weight:800;display:grid;place-items:center;font-size:13px}
   .tip{margin-top:18px;background:#fff4d6;color:#7a5200;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.4}
   .foot{text-align:center;color:#7a8b83;font-size:12px;margin-top:16px}
+  .abrir{display:none;background:#eef6ff;border:1.5px solid #9cc3f5;border-radius:16px;padding:14px;margin-bottom:16px;text-align:center}
+  .abrir p{margin:0 0 10px;font-size:14px;line-height:1.4;color:#1f3b5c}
+  .abrir a{display:block;background:#1a73e8;color:#fff;text-decoration:none;font-weight:800;font-size:17px;padding:14px;border-radius:12px}
+  .abrir small{display:block;margin-top:8px;font-size:12px;letter-spacing:0;opacity:1;color:#4b6584;font-weight:500}
 </style>
 </head>
 <body>
@@ -48,11 +52,49 @@
     <div class="stripe"><i style="background:#3b6cf0"></i><i style="background:#35c98e"></i><i style="background:#e8323f"></i></div>
   </div>
   <div class="card">
+    <div class="abrir" id="abrir">
+      <p id="abrir-txt"></p>
+      <a id="abrir-btn" href="#"></a>
+      <small id="abrir-ayuda"></small>
+    </div>
     <a class="btn" href="https://accounts.google.com/AccountChooser?continue=https%3A%2F%2Fscript.google.com%2Fa%2Fmacros%2Fbayard.edu.ar%2Fs%2FAKfycbztAvgVm-XYb0prBg8BDS0qMgPZjgArpCP6rp1jPZ_zc4dTslxyXgz6r-viu7l60ZM%2Fexec">Votar</a>
     <div class="paso"><div class="n">1</div><div>Tocá <b>Votar</b> y elegí tu cuenta de Google <b>@bayard.edu.ar</b>. Si no aparece, tocá “Usar otra cuenta” y agregala.</div></div>
     <div class="paso"><div class="n">2</div><div>Escribí tu <b>nombre y apellido</b> y tu <b>fecha de nacimiento</b>, aceptá el reglamento y elegí a tu Captain.</div></div>
     <div class="tip">Tip: agregá esta página a tu pantalla de inicio y vas a tener la app <b>Yo Voto</b> con el escudo.</div>
     <div class="foot">Votación secreta · Un solo voto por alumno</div>
   </div>
+<script>
+  // Si entraron desde WhatsApp, Instagram, Gmail u otro navegador, les ofrece abrir la página
+  // en Safari (iPhone) o en Chrome (Android), donde se puede agregar el ícono a la pantalla de inicio.
+  (function () {
+    var ua = navigator.userAgent || '';
+    var ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var android = /Android/.test(ua);
+    var enApp = /FBAN|FBAV|FB_IAB|Instagram|WhatsApp|Line\/|Twitter|TikTok|musical_ly|Snapchat|LinkedInApp|Telegram|GSA\//.test(ua);
+    var aqui = location.host + location.pathname;
+    var caja = document.getElementById('abrir'), txt = document.getElementById('abrir-txt'),
+        btn = document.getElementById('abrir-btn'), ayuda = document.getElementById('abrir-ayuda');
+    if (ios) {
+      var noSafari = enApp || /CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo|YaBrowser/.test(ua) || !/Safari\//.test(ua);
+      if (!noSafari) return;
+      txt.innerHTML = 'Para votar y agregar <b>Yo Voto</b> a tu pantalla de inicio, abrí esta página en <b>Safari</b>.';
+      btn.textContent = 'Abrir en Safari';
+      btn.href = 'x-safari-https://' + aqui;
+      ayuda.textContent = 'Si no se abre, tocá los tres puntos (···) o el ícono de compartir y elegí “Abrir en Safari”.';
+      caja.style.display = 'block';
+    } else if (android) {
+      var esChrome = /Chrome\/\d/.test(ua) && !/; wv\)|EdgA|OPR\/|SamsungBrowser|Firefox|YaBrowser|UCBrowser|MiuiBrowser|HuaweiBrowser|DuckDuckGo/.test(ua) && !enApp;
+      if (esChrome) return;
+      var intent = 'intent://' + aqui + '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + encodeURIComponent(location.href) + ';end';
+      txt.innerHTML = 'Para votar y agregar <b>Yo Voto</b> a tu pantalla de inicio, abrí esta página en <b>Chrome</b>.';
+      btn.textContent = 'Abrir en Chrome';
+      btn.href = intent;
+      ayuda.textContent = 'Si no se abre, tocá los tres puntos (⋮) y elegí “Abrir en Chrome” o “Abrir en el navegador”.';
+      caja.style.display = 'block';
+      // Intenta abrir Chrome solo, una vez (si la app lo bloquea, queda el botón).
+      try { if (!sessionStorage.getItem('yv_chrome')) { sessionStorage.setItem('yv_chrome', '1'); location.href = intent; } } catch (e) {}
+    }
+  })();
+</script>
 </body>
 </html>
