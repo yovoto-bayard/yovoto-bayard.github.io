@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Premiaciones 2026 · Bayard</title>
+<meta name="theme-color" content="#0a6649">
+<meta name="robots" content="noindex">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<style>
+  *{box-sizing:border-box} html,body{margin:0;height:100%}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#0a6649;color:#fff;display:flex;flex-direction:column;min-height:100vh}
+  .top{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px 24px;text-align:center}
+  svg{width:110px;height:auto;filter:drop-shadow(0 8px 18px rgba(0,0,0,.3))}
+  small{letter-spacing:.28em;font-size:12px;opacity:.85;font-weight:700;margin-top:18px}
+  h1{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:46px;margin:6px 0 4px}
+  .sub{font-size:17px;font-weight:600;opacity:.95}
+  .stripe{display:flex;height:6px;width:170px;margin:18px auto 0;border-radius:3px;overflow:hidden} .stripe i{flex:1}
+  .card{background:#fff;color:#10231c;border-radius:24px 24px 0 0;padding:26px 22px calc(26px + env(safe-area-inset-bottom));max-width:520px;width:100%;margin:0 auto}
+  a.btn{display:block;text-align:center;background:#0a6649;color:#fff;text-decoration:none;font-weight:800;font-size:20px;padding:18px;border-radius:16px}
+  .paso{display:flex;gap:12px;align-items:flex-start;margin:16px 0 0;font-size:15px;line-height:1.4;color:#33443c}
+  .n{flex:none;width:26px;height:26px;border-radius:50%;background:#e7f2ee;color:#0a6649;font-weight:800;display:grid;place-items:center;font-size:13px}
+  .foot{text-align:center;color:#7a8b83;font-size:12px;margin-top:18px}
+</style>
+</head>
+<body>
+  <div class="top">
+    <svg viewBox="196 92 667 864" aria-hidden="true"><path id="e1" fill="#0a6649" stroke="#fff" stroke-width="6" fill-rule="evenodd"/><path id="e2" fill="#fff" fill-rule="evenodd"/></svg>
+    <small>COLEGIO BAYARD · EDUCACIÓN FÍSICA</small>
+    <h1>Premiaciones 2026</h1>
+    <div class="sub">Votación de los profes</div>
+    <div class="stripe"><i style="background:#1d4ed8"></i><i style="background:#fff"></i><i style="background:#c1121f"></i></div>
+  </div>
+  <div class="card">
+    <a class="btn" id="votar" href="#">Votar</a>
+    <div class="paso"><span class="n">1</span><span>Elegí tu <b>cuenta @bayard.edu.ar</b>.</span></div>
+    <div class="paso"><span class="n">2</span><span>Elegí un alumno o alumna en cada una de las <b>12 categorías</b>.</span></div>
+    <div class="paso"><span class="n">3</span><span>Revisá y <b>confirmá</b>. Se vota una sola vez y el voto es secreto.</span></div>
+    <div class="foot">Colegio Bayard · Premiaciones Deportivas 2026</div>
+  </div>
+<script>
+  // Link de la app (Apps Script "Votacion Premiaciones 2026")
+  const URL_APP = 'https://script.google.com/a/macros/bayard.edu.ar/s/AKfycbyTYrJKyWfrYfndfeXxzQepyI0qJJdekiLN32acTmErmy3SG1GT_jAxfzjqugWOrdsPiA/exec';
+  document.getElementById('votar').href = 'https://accounts.google.com/AccountChooser?continue=' + encodeURIComponent(URL_APP);
+  // El escudo se toma de la página de Yo Voto (mismo sitio)
+  fetch('../').then(r => r.text()).then(t => {
+    const d = [...t.matchAll(/ d="([^"]+)"/g)].map(m => m[1]);
+    if (d.length >= 2) { document.getElementById('e1').setAttribute('d', d[0]); document.getElementById('e2').setAttribute('d', d[1]); }
+  }).catch(() => {});
+</script>
+</body>
+</html>
